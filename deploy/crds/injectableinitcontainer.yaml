@@ -1,0 +1,15 @@
+apiVersion: danielstepan.cz/v1
+kind: InjectableInitContainer
+metadata:
+  name: injected-init-container
+spec:
+  image: busybox
+  name: injected-busybox
+  command: ["/bin/sh", "-c"]
+  args: ["echo Hello, World!"]
+  # env:
+  #   - name: MY_VAR
+  #     value: "some-value"
+  # volumeMounts:
+  #   - name: my-volume
+  #     mountPath: /my/path
