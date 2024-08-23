@@ -11,27 +11,18 @@ import (
 	config "github.com/danielstepan/k8s-init-injector/pkg/config"
 )
 
-type InitContainer struct {
-	Name    string   `json:"name"`
-	Image   string   `json:"image"`
-	Command []string `json:"command,omitempty"`
-	Args    []string `json:"args,omitempty"`
-}
-
-// Metadata struct to hold the name field
-type Metadata struct {
-	Name string `json:"name"`
-}
-
-// InjectableInitContainer struct now includes Metadata
-type InjectableInitContainer struct {
-	Metadata Metadata      `json:"metadata"`
-	Spec     InitContainer `json:"spec"`
-}
-
-// InjectableInitContainerList remains the same
 type InjectableInitContainerList struct {
-	Items []InjectableInitContainer `json:"items"`
+	Items []struct {
+		Metadata struct {
+			Name string `json:"name"`
+		} `json:"metadata"`
+		Spec struct {
+			Name    string   `json:"name"`
+			Image   string   `json:"image"`
+			Command []string `json:"command,omitempty"`
+			Args    []string `json:"args,omitempty"`
+		} `json:"spec"`
+	} `json:"items"`
 }
 
 func HandleCRD(w http.ResponseWriter, r *http.Request) {
@@ -57,13 +48,6 @@ func HandleCRD(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	// Extract the Metadata.Name and Spec fields
-	var initContainers []InitContainer
-	for _, item := range initContainerList.Items {
-		fmt.Printf("Name: %s\n", item.Metadata.Name)
-		initContainers = append(initContainers, item.Spec)
-	}
-
-	fmt.Println("InitContainers: ", initContainers)
+	fmt.Println("InitContainer List: ", initContainerList)
 
 }
