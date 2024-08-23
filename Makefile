@@ -1,4 +1,4 @@
-.PHONY: build push clean
+.PHONY: build push clean compile rollout
 
 IMAGE_NAME := k8s-init-injector
 IMAGE_TAG := latest
@@ -12,3 +12,9 @@ push:
 
 clean:
 	docker rmi $(DOCKER_REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG)
+
+compile:
+	go build -o bin/k8s-init-injector cmd/main.go
+
+#rollout:
+#    kubectl rollout restart deployment/example-webhook

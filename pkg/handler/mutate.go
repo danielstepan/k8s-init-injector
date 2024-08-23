@@ -2,7 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"fmt"
+	"io"
 	"net/http"
 
 	"k8s.io/api/admission/v1beta1"
@@ -18,11 +19,13 @@ var (
 )
 
 func HandleMutate(w http.ResponseWriter, r *http.Request) {
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "could not read request body", http.StatusInternalServerError)
 		return
 	}
+
+	fmt.Println("Request body: ", string(body))
 
 	var admissionReviewReq v1beta1.AdmissionReview
 

@@ -1,7 +1,7 @@
 apiVersion: danielstepan.cz/v1
 kind: InjectableInitContainer
 metadata:
-  name: injected-init-container
+  name: injected-init-container2
 spec:
   image: busybox
   name: injected-busybox
