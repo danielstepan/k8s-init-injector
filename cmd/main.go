@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	fmt.Println("Starting the server...")
 	config.InitializeFlags()
 
 	err := config.LoadKubeConfig()

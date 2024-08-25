@@ -12,7 +12,30 @@ type PatchOperation struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-func CreatePodPatch(pod *apiv1.Pod) ([]byte, error) {
+func addInitContainer(pod *apiv1.Pod) []PatchOperation {
+	initContainers := pod.Spec.InitContainers
+
+	ic := apiv1.Container{
+		Name:  "init-container",
+		Image: "busybox",
+		Command: []string{
+			"echo",
+			"Hello, World!",
+		},
+	}
+
+	initContainers = append(initContainers, ic)
+
+	patches := []PatchOperation{{
+		Op:    "add",
+		Path:  "/spec/initContainers",
+		Value: initContainers,
+	}}
+
+	return patches
+}
+
+func addLabel(pod *apiv1.Pod) []PatchOperation {
 	labels := pod.ObjectMeta.Labels
 	labels["example-webhook"] = "it-worked"
 
@@ -21,6 +44,14 @@ func CreatePodPatch(pod *apiv1.Pod) ([]byte, error) {
 		Path:  "/metadata/labels",
 		Value: labels,
 	}}
+	return patches
+}
 
-	return json.Marshal(patches)
+func CreatePodPatch(pod *apiv1.Pod) ([]byte, error) {
+	var patch []PatchOperation
+	//udelat to configurovatgelny
+	patch = append(patch, addLabel(pod)...)
+	patch = append(patch, addInitContainer(pod)...)
+
+	return json.Marshal(patch)
 }

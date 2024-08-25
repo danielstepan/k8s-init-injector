@@ -4,6 +4,9 @@ metadata:
   name: demo-pod
   labels:
     example-webhook-enabled: "true"
+  annotations:
+    k8s-init-injector/inject: "true"
+    k8s-init-injector/container: "busybox-helloworld"   
 spec:
   containers:
   - name: nginx
