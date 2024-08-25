@@ -40,21 +40,17 @@ func HandleMutate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	patchBytes, err := webhook.CreatePodPatch(&pod)
+	admissionReviewResponse, err := webhook.NewAdmissionResponse(pod, admissionReviewReq)
 	if err != nil {
-		http.Error(w, "could not create patch", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	admissionReviewResponse := v1beta1.AdmissionReview{
-		Response: &v1beta1.AdmissionResponse{
-			UID:     admissionReviewReq.Request.UID,
-			Allowed: true,
-			Patch:   patchBytes,
-		},
+	admissionReview := v1beta1.AdmissionReview{
+		Response: admissionReviewResponse,
 	}
 
-	respBytes, err := json.Marshal(&admissionReviewResponse)
+	respBytes, err := json.Marshal(&admissionReview)
 	if err != nil {
 		http.Error(w, "could not marshal response", http.StatusInternalServerError)
 		return

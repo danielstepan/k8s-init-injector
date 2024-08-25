@@ -47,6 +47,7 @@ func addLabel(pod *apiv1.Pod) []PatchOperation {
 	return patches
 }
 
+// TODO VYTAHNOUT ANNOTACE Z PODU, FETCHNOUT CONTAINERY, NAJIT SPRAVNEJ, VYTVORIT PATCH
 func CreatePodPatch(pod *apiv1.Pod) ([]byte, error) {
 	var patch []PatchOperation
 	//udelat to configurovatgelny
