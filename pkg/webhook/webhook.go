@@ -13,11 +13,16 @@ const (
 	annotationInitContainerName = "k8s-init-injector/container"
 )
 
-func isMutationNeeded(metadata *metav1.ObjectMeta) bool {
+func getPodAnnotations(metadata *metav1.ObjectMeta) map[string]string {
 	annotations := metadata.GetAnnotations()
 	if annotations == nil {
-		return false
+		return map[string]string{}
 	}
+	return annotations
+}
+
+func isMutationNeeded(metadata *metav1.ObjectMeta) bool {
+	annotations := getPodAnnotations(metadata)
 
 	shouldInject := strings.ToLower(annotations[annotationInjectKey])
 	return shouldInject == "true"
