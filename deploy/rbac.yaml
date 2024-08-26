@@ -12,7 +12,7 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
-- apiGroups: ["danielstepan.cz/v1"]
+- apiGroups: ["danielstepan.cz"]
   resources: ["injectableinitcontainers"]
   verbs: ["get", "watch", "list"]
 ---

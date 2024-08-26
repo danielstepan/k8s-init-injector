@@ -37,10 +37,11 @@ func getRequiredInitContainer(pod *apiv1.Pod) (apiv1.Container, error) {
 		return apiv1.Container{}, fmt.Errorf("No init container name provided")
 
 	}
-
+	fmt.Printf("Looking for init container %s\n", initContainerName)
 	presentContainers := FetchInjectableInitContainers().Items
 	for _, container := range presentContainers {
 		if container.Metadata.Name == initContainerName {
+			fmt.Printf("Found init container %s\n", initContainerName)
 			return container.Spec, nil
 		}
 	}
