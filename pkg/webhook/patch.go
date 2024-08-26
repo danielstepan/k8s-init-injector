@@ -12,19 +12,10 @@ type PatchOperation struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-func addInitContainer(pod *apiv1.Pod) []PatchOperation {
+func addInitContainer(pod *apiv1.Pod, container apiv1.Container) []PatchOperation {
 	initContainers := pod.Spec.InitContainers
 
-	ic := apiv1.Container{
-		Name:  "init-container",
-		Image: "busybox",
-		Command: []string{
-			"echo",
-			"Hello, World!",
-		},
-	}
-
-	initContainers = append(initContainers, ic)
+	initContainers = append(initContainers, container)
 
 	patches := []PatchOperation{{
 		Op:    "add",
@@ -47,12 +38,10 @@ func addLabel(pod *apiv1.Pod) []PatchOperation {
 	return patches
 }
 
-// TODO VYTAHNOUT ANNOTACE Z PODU, FETCHNOUT CONTAINERY, NAJIT SPRAVNEJ, VYTVORIT PATCH
-func CreatePodPatch(pod *apiv1.Pod) ([]byte, error) {
+func CreatePodPatch(pod *apiv1.Pod, container apiv1.Container) ([]byte, error) {
 	var patch []PatchOperation
-	//udelat to configurovatgelny
 	patch = append(patch, addLabel(pod)...)
-	patch = append(patch, addInitContainer(pod)...)
+	patch = append(patch, addInitContainer(pod, container)...)
 
 	return json.Marshal(patch)
 }
