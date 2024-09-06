@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: example-webhook
+  name: k8s-init-injector-webhook
   namespace: default
 spec:
   selector:
-    app: example-webhook
+    app: k8s-init-injector-webhook
   ports:
     - port: 443
       targetPort: tls
@@ -17,26 +17,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-webhook
+  name: k8s-init-injector-webhook
   namespace: default
   labels:
-    app: example-webhook
+    app: k8s-init-injector-webhook
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: example-webhook
+      app: k8s-init-injector-webhook
   template:
     metadata:
       labels:
-        app: example-webhook
+        app: k8s-init-injector-webhook
     spec:
-      serviceAccountName: example-webhook
+      serviceAccountName: k8s-init-injector-webhook
       securityContext:
         runAsNonRoot: true
         runAsUser: 1234
       containers:
-      - name: server
+      - name: k8s-init-injector
         image: czekish/k8s-init-injector:latest
         imagePullPolicy: Always
         ports:
@@ -45,10 +45,10 @@ spec:
         - containerPort: 80
           name: metrics
         volumeMounts:
-        - name: webhook-tls-certs
+        - name: k8s-init-injector-webhook-tls-certs
           mountPath: /etc/webhook/certs/
           readOnly: true
       volumes:
-      - name: webhook-tls-certs
+      - name: k8s-init-injector-webhook-tls-certs
         secret:
-          secretName: example-webhook-tls
+          secretName: k8s-init-injector-webhook-tls

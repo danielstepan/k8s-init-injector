@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: example-webhook
+  name: k8s-init-injector-webhook
   namespace: default
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: example-webhook
+  name: k8s-init-injector-webhook
 rules:
 - apiGroups: [""]
   resources: ["pods"]
@@ -19,12 +19,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: example-webhook
+  name: k8s-init-injector-webhook
 subjects:
 - kind: ServiceAccount
-  name: example-webhook
+  name: k8s-init-injector-webhook
   namespace: default
 roleRef:
   kind: ClusterRole
-  name: example-webhook
+  name: k8s-init-injector-webhook
   apiGroup: rbac.authorization.k8s.io
