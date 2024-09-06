@@ -28,7 +28,7 @@ func addInitContainer(pod *apiv1.Pod, container apiv1.Container) []PatchOperatio
 
 func addLabel(pod *apiv1.Pod) []PatchOperation {
 	labels := pod.ObjectMeta.Labels
-	labels["example-webhook"] = "it-worked"
+	labels["injected-init-container"] = "true"
 
 	patches := []PatchOperation{{
 		Op:    "add",
