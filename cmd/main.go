@@ -23,6 +23,5 @@ func main() {
 
 	http.HandleFunc("/", handler.HandleRoot)
 	http.HandleFunc("/mutate", handler.HandleMutate)
-	http.HandleFunc("/crd", handler.HandleCRD)
 	log.Fatal(http.ListenAndServeTLS(":"+strconv.Itoa(parameters.Port), parameters.CertFile, parameters.KeyFile, nil))
 }
