@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: demo-pod
   labels:
-    example-webhook-enabled: "true"
+    k8s-init-injector-webhook-enabled: "true"
   annotations:
     k8s-init-injector/inject: "true"
     k8s-init-injector/container: "busybox-helloworld"   
