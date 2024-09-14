@@ -3,7 +3,6 @@ package webhook
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	config "github.com/danielstepan/k8s-init-injector/pkg/config"
 	apiv1 "k8s.io/api/core/v1"
@@ -26,13 +25,11 @@ func FetchInjectableInitContainers() InjectableInitContainerList {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("CRD: %s\n", string(d))
 
 	var initContainerList InjectableInitContainerList
 	if err := json.Unmarshal(d, &initContainerList); err != nil {
 		panic(err)
 	}
 
-	fmt.Println("InitContainer List: ", initContainerList)
 	return initContainerList
 }

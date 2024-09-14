@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/danielstepan/k8s-init-injector/pkg/config"
@@ -11,9 +12,12 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting the server...")
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+
+	slog.Info("Starting the server...")
 	config.InitializeFlags()
 
+	slog.Info("Loading the kubeconfig...")
 	err := config.LoadKubeConfig()
 	if err != nil {
 		panic(err.Error())

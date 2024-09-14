@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -24,8 +23,6 @@ func HandleMutate(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "could not read request body", http.StatusInternalServerError)
 		return
 	}
-
-	fmt.Println("Request body: ", string(body))
 
 	var admissionReviewReq v1beta1.AdmissionReview
 

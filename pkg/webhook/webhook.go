@@ -2,6 +2,7 @@ package webhook
 
 import (
 	"fmt"
+	"log/slog"
 	"strings"
 
 	v1beta1 "k8s.io/api/admission/v1beta1"
@@ -37,11 +38,11 @@ func getRequiredInitContainer(pod *apiv1.Pod) (apiv1.Container, error) {
 		return apiv1.Container{}, fmt.Errorf("No init container name provided")
 
 	}
-	fmt.Printf("Looking for init container %s\n", initContainerName)
+	slog.Info("Looking for init container", slog.String("initContainerName", initContainerName))
 	presentContainers := FetchInjectableInitContainers().Items
 	for _, container := range presentContainers {
 		if container.Metadata.Name == initContainerName {
-			fmt.Printf("Found init container %s\n", initContainerName)
+			slog.Info("Found init container", slog.String("initContainerName", initContainerName))
 			return container.Spec, nil
 		}
 	}
@@ -67,8 +68,7 @@ func NewAdmissionResponse(pod apiv1.Pod, admissionReviewReq v1beta1.AdmissionRev
 			},
 		}, nil
 	}
-
-	fmt.Printf("About to create patch for pod %s\n", pod.Name)
+	slog.Info("About to create patch for pod", slog.String("pod", pod.Name))
 	patchBytes, err := CreatePodPatch(&pod, containerToInject)
 	if err != nil {
 		return nil, err
